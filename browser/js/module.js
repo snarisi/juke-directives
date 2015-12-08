@@ -12,7 +12,7 @@ app.directive('player', function (PlayerFactory) {
         restrict: 'E',
         templateUrl: '/templates/player.html',
         link: function (scope) {
-            
+
             scope.getCurrentSong = PlayerFactory.getCurrentSong;
             scope.isPlaying = PlayerFactory.isPlaying;
             scope.forward = PlayerFactory.next;
@@ -25,7 +25,7 @@ app.directive('player', function (PlayerFactory) {
             scope.toggle = function () {
                 if (PlayerFactory.isPlaying()) PlayerFactory.pause();
                 else PlayerFactory.resume();
-            };            
+            };
         }
     };
 });
@@ -36,7 +36,7 @@ app.directive('albumList', function () {
         templateUrl: '/templates/album-list.html',
         scope: {
             albums: "="
-        } 
+        }
     };
 });
 
@@ -45,9 +45,10 @@ app.directive('songList', function (PlayerFactory) {
         restrict: 'E',
         templateUrl: '/templates/song-list.html',
         scope: {
-            songs: '='
+            songs: '=',
+            doubleClick: '&'
         },
-        link: function (scope) {
+        link: function (scope, element) {
             scope.isCurrent = function (song) {
                 var current = PlayerFactory.getCurrentSong();
                 return current && current._id == song._id;
@@ -57,6 +58,21 @@ app.directive('songList', function (PlayerFactory) {
             };
 
         }
+    }
+})
 
+app.directive('doubleClick', function (PlayerFactory) {
+    return {
+        restrict: 'A',
+        scope: {
+            doubleClick: '&'
+        },
+        link: function (scope, element) {
+            element.on('dblclick', function(){
+                scope.doubleClick();
+            })
+
+
+        }
     }
 })
